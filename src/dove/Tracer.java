@@ -18,7 +18,7 @@ public class Tracer {
     public void Render(WritableRaster raster, IntPosition cam, IntPosition end){
         //calculate view frustrum
         //first, we need the (x,y) coordinates of the horizon.
-        
+        //This is a new comment
         
         //Then we calculate the offset from those two positions.
         
