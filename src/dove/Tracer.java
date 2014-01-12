@@ -18,9 +18,6 @@ public class Tracer {
     public void Render(WritableRaster raster, IntPosition cam, IntPosition end){
         //calculate view frustrum
         //first, we need the (x,y) coordinates of the horizon.
-        //Assume that the camera position is in the center of a sphere.
-        //We know the center position, and a point on the sphere that the camera is facing.
-        //We also know two angles, alpha and beta, determining the width and height angles.
         
         
         //Then we calculate the offset from those two positions.
