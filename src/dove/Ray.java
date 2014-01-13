@@ -10,10 +10,13 @@ package dove;
  *
  * @author Jonas
  */
-public abstract class Ray<Vector> {
-    public Vector start;
-    public Vector finish;
-    public Vector delta;
+public class Ray {
+    public IntPosition start;
+    public IntPosition finish;
+    public IntPosition delta;
     
-    
+    public Ray(IntPosition start, IntPosition finish){
+        this.start = start;
+        this.finish = finish;
+    }
 }

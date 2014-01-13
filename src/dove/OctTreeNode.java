@@ -16,7 +16,7 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
     int levelMask = 1;
     int level = 1;
     public OctTreeNode(int level){
-        this.SubTree = level==0?new ByteVoxel[8]:new OctTreeNode[8];
+        this.SubTree = level==1?new ByteVoxel[8]:new OctTreeNode[8];
         SetLevel(level);
     
     }

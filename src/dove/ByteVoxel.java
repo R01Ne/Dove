@@ -19,9 +19,13 @@ import java.util.logging.Logger;
 public class ByteVoxel implements IOctTreeNode<ByteVoxel, IntPosition> {
     public byte ID;
 
+    ByteVoxel(byte i) {
+        ID = i;
+    }
+
     @Override
     public void Insert(ByteVoxel v, IntPosition p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     @Override
