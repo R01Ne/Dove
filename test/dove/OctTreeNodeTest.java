@@ -99,7 +99,7 @@ public class OctTreeNodeTest {
         fail("The test case is a prototype.");
     }
     
-    private OctTreeNode FillBlock(IntPosition min, IntPosition max, ByteVoxel v){
+    public static OctTreeNode FillBlock(IntPosition min, IntPosition max, ByteVoxel v){
         OctTreeNode node = new OctTreeNode(10);
         for(int x = min.x; x < max.x; x++)
         for(int y = min.y; y < max.y; y++)

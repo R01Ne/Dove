@@ -20,6 +20,13 @@ public class IntPosition {
         this.y = y;
         this.z = z;
     }
+
+    IntPosition(IntPosition p0) {
+        this.x = p0.x;
+        this.y = p0.y;
+        this.z = p0.z;
+        
+    }
     
     public int SubIndex(int level,int levelMask){
         int ret = ((x&levelMask)>>level);

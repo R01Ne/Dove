@@ -41,7 +41,8 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
 
     @Override
     public ByteVoxel Get(IntPosition p) {
-        return SubTree[p.SubIndex(level, levelMask)].Get(p);
+        IOctTreeNode<ByteVoxel, IntPosition> st =  SubTree[p.SubIndex(level, levelMask)];
+        return st == null? null:st.Get(p);
     }
 
     @Override
