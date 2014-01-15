@@ -15,8 +15,15 @@ public class Ray {
     public IntPosition finish;
     public IntPosition delta;
     
+    public ByteVoxel voxel;
+    
     public Ray(IntPosition start, IntPosition finish){
         this.start = start;
         this.finish = finish;
+    }
+    
+    @Override
+    public String toString(){
+        return "Ray: [" + start + " -> " + finish + "]";
     }
 }

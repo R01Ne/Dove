@@ -27,6 +27,14 @@ public class IntPosition {
         return ret | (((y&levelMask)>>level)<<2);
     }
     
-
+    public void Copy(IntPosition p){
+        x=p.x;
+        y=p.y;
+        z=p.z;
+    }
     
+    @Override
+    public String toString(){
+        return "{" + x + ", " + y + ", " + z + " }";
+    }
 }
