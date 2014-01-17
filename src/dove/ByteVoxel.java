@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class ByteVoxel implements IOctTreeNode<ByteVoxel, IntPosition> {
     public byte ID;
 
-    ByteVoxel(byte i) {
+    public ByteVoxel(byte i) {
         ID = i;
     }
 

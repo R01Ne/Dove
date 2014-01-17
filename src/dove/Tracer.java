@@ -18,30 +18,42 @@ import java.util.Hashtable;
 public class Tracer {
     OctTreeNode world;
     HashMap<Byte, Color> voxelColors;
-    Camera cam;
+    public Camera cam;
     boolean isInitialized = false;
     
     public void init(){
         voxelColors = new HashMap<>();
+        
         for(int b = 0; b < 0x00ff;b++){
             voxelColors.put((byte)b, new Color(b,b,b));
         }
         cam = new Camera();
         isInitialized = true;
     }
-    
+
+        public void Render(int[] raster, int width, int height){
+        //calculate view frustrum
+        if (!isInitialized) init();
+        Ray[][] rays = cam.generateRays(width, height);
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height;y++){
+                Ray r = rays[x][y];
+                r.voxel= trace(r);
+                raster[x+width*y] = r.voxel!=null?Color.BLACK.getRGB():Color.BLUE.getRGB();
+                
+            }
+        }
+        
+    }
     
     public void Render(WritableRaster raster){
         //calculate view frustrum
         if (!isInitialized) init();
         Ray[][] rays = cam.generateRays(raster.getWidth(), raster.getHeight());
         for(int x = 0; x < raster.getWidth(); x++){
-            System.out.println();
             for(int y = 0; y < raster.getHeight();y++){
                 Ray r = rays[x][y];
                 r.voxel= trace(r);
-                System.out.print(r.voxel==null?".":"M");
-                
             }
         }
         
@@ -49,8 +61,13 @@ public class Tracer {
         for(int x = 0; x < raster.getWidth(); x++){
             for(int y = 0; y < raster.getHeight();y++){
                 ByteVoxel v = rays[x][y].voxel;
-                if (v != null)
-                    raster.setPixel(y, y, voxelColors.get(v.ID).getColorComponents(new float[3]));
+                if (v != null) {
+                    //raster.setPixel(x, y, voxelColors.get(v.ID).getColorComponents(new float[3]));
+                    raster.setPixel(y, y, Color.RED.getColorComponents(new float[4]));
+                    ///System.out.println("render " + x + " " +y);
+                } else {
+                    raster.setPixel(y, y, Color.BLUE.getColorComponents(new float[4]));
+                }
             }
         }
     }
@@ -95,8 +112,8 @@ public class Tracer {
     
     //drift controls when to step in 'shallow' planes
     //starting value keeps Line centred
-    drift_xy  = (delta.x >> 2);
-    drift_xz  = (delta.x >> 2);
+    drift_xy  = (delta.x >> 1);
+    drift_xz  = (delta.x >> 1);
     
     //direction of line
     step = new IntPosition(p0.x > p1.x? -1:1,p0.y > p1.y? -1:1,p0.z > p1.z? -1:1);
@@ -143,5 +160,9 @@ public class Tracer {
     
       }
       return ret;
+    }
+
+    public void setWorld(OctTreeNode world) {
+        this.world = world;
     }
 }

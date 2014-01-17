@@ -14,7 +14,7 @@ public class Camera {
     
     //direction and view width, horizontal
     public double horizontalAngle = 0, horizontalView = Math.PI /3;
-    public double verticalAngle = 0, verticalView = Math.PI /3;
+    public double verticalAngle = 0, verticalView = Math.PI /4;
     
     public double x=0,y=0,z=0;
     private double backplaneDistance = 1000;
@@ -94,8 +94,8 @@ public class Camera {
         updateIntPositions();
         for(int i = 0; i < width; i++)
         {
-            IntPosition lineUpper = intermediate(upperLeft,lowerLeft, ((double)i)/(((double)width)-1));
-            IntPosition lineLower = intermediate(upperRight,lowerRight, ((double)i)/(((double)width)-1));
+            IntPosition lineUpper = intermediate(upperLeft,upperRight, ((double)i)/(((double)width)-1));
+            IntPosition lineLower = intermediate(lowerLeft,lowerRight, ((double)i)/(((double)width)-1));
             
             
             ret[i] = new Ray[height];

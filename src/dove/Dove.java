@@ -16,7 +16,7 @@ public class Dove {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Engine.main(args);
     }
     
 }

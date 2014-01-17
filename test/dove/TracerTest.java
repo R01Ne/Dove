@@ -60,10 +60,13 @@ public class TracerTest {
     public void testRender() {
         System.out.println("Render");
         WritableRaster raster;
-        raster = new BufferedImage(10,10,4).getRaster();
+        raster = new BufferedImage(30,30,4).getRaster();
         
         Tracer instance = new Tracer();
-        instance.world = OctTreeNodeTest.FillBlock(new IntPosition(2,2,2), new IntPosition(7,7,7), new ByteVoxel((byte)0x34));
+        instance.init();
+        instance.cam.z += 10;
+        instance.cam.verticalAngle -= (Math.PI/8);
+        instance.world = OctTreeNodeTest.FillBlock(new IntPosition(12,2,2), new IntPosition(17,7,7), new ByteVoxel((byte)0x34));
         
         instance.Render(raster);
         // TODO review the generated test code and remove the default call to fail.

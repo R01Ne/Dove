@@ -15,7 +15,7 @@ public class IntPosition {
     public int y;
     public int z;
 
-    IntPosition(int x, int y, int z) {
+    public IntPosition(int x, int y, int z) {
         this.x= x;
         this.y = y;
         this.z = z;
@@ -31,7 +31,7 @@ public class IntPosition {
     public int SubIndex(int level,int levelMask){
         int ret = ((x&levelMask)>>level);
         ret |= (((y&levelMask)>>level)<<1);
-        return ret | (((y&levelMask)>>level)<<2);
+        return ret | (((z&levelMask)>>level)<<2);
     }
     
     public void Copy(IntPosition p){
