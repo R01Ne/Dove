@@ -47,13 +47,30 @@ public class Demo extends javax.swing.JPanel {
         @Override
         protected Void doInBackground() throws Exception{
             OctTreeNode world = new OctTreeNode(10);
-            OctTreeNode.fillCube(world, new IntPosition(32,1,1), new IntPosition(34,5,5), new ByteVoxel((byte)0x88));
+            //OctTreeNode.fillCube(world, new IntPosition(12,1,1), new IntPosition(14,5,5), new ByteVoxel((byte)0x78));
+            //OctTreeNode.fillCube(world, new IntPosition(1,12,1), new IntPosition(2,15,5), new ByteVoxel((byte)0xA8));
+world.Insert(new ByteVoxel((byte)0xa5), new IntPosition(14,4,4));
+world.Insert(new ByteVoxel((byte)0xc5), new IntPosition(14,3,4));
+world.Insert(new ByteVoxel((byte)0xf5), new IntPosition(14,4,3));
+world.Insert(new ByteVoxel((byte)0x85), new IntPosition(14,3,3));
+
+            for(int i = -24; i < 24; i++){
+                for (int j = -24; j < 24; j++){
+                    boolean light =j%2==0;
+                    //(byte)(light?0x000000f5:0x00000035);
+                    world.Insert(new ByteVoxel((byte)(j^i)), new IntPosition(i,j,-1));
+
+                }
+            }
+
             Tracer t = new Tracer();
             t.init();
             t.setWorld(world);
+            t.cam.SetBackPlaneDistance(100);
+
             t.cam.x = 0;
             t.cam.y = 0;
-            t.cam.z = 0;
+            t.cam.z = 10;
             //t.cam.horizontalAngle = Math.PI/4;
             int frames = 0;
             int[] mem = new int[300 * 240];
@@ -65,7 +82,6 @@ public class Demo extends javax.swing.JPanel {
                 t.Render(mem,300,240);
                 t.cam.horizontalAngle +=Math.PI/16 ;
                 
-                t.cam.SetBackPlaneDistance(40);
 //for (int y = 0; y < 768; y++)
                 //    for (int x = 0; x < 1024; x++)
                 //        mem[x + y * 1024] = col;
