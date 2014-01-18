@@ -111,7 +111,10 @@ public class Tracer {
     }
     //r.performSwap();
     //delta is Length in each plane
-    delta = new IntPosition(Math.abs(p1.x - p0.x),Math.abs(p1.y - p0.y),Math.abs(p1.z - p0.z));
+    delta = new IntPosition(
+            Math.abs(p1.x - p0.x),
+            Math.abs(p1.y - p0.y),
+            Math.abs(p1.z - p0.z));
     
     //drift controls when to step in 'shallow' planes
     //starting value keeps Line centred
@@ -119,13 +122,16 @@ public class Tracer {
     drift_xz  = (delta.x /2);
     
     //direction of line
-    step = new IntPosition(p0.x > p1.x? -1:1,p0.y > p1.y? -1:1,p0.z > p1.z? -1:1);
+    step = new IntPosition(
+            p0.x > p1.x? -1:1,
+            p0.y > p1.y? -1:1,
+            p0.z > p1.z? -1:1);
     
     //starting point
     p = new IntPosition(p0);
     //step through longest delta (which we have swapped to x)
     //for x = x0 to x1 step step_x
-    for (; p.x <=p1.x; p.x += step.x){  
+    for (; (p0.x<p1.x)?(p.x <=p1.x):(p.x >=p1.x); p.x += step.x){  
         c = new IntPosition(p);
         
         if (swap_xz) {
@@ -146,8 +152,8 @@ public class Tracer {
         ret = world.Get(c);
         if (ret!= null) return ret;
         //update progress in other planes
-        drift_xy = drift_xy - delta.y;
-        drift_xz = drift_xz - delta.z;
+        drift_xy -= delta.y;
+        drift_xz -= delta.z;
 
         //step in y plane
         if (drift_xy < 0) {

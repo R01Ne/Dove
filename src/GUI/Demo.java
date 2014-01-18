@@ -54,8 +54,9 @@ world.Insert(new ByteVoxel((byte)0xc5), new IntPosition(14,3,4));
 world.Insert(new ByteVoxel((byte)0xf5), new IntPosition(14,4,3));
 world.Insert(new ByteVoxel((byte)0x85), new IntPosition(14,3,3));
 
-            for(int i = -24; i < 24; i++){
-                for (int j = -24; j < 24; j++){
+            int floorSize = 100;
+            for(int i = -floorSize; i < floorSize; i++){
+                for (int j = -floorSize; j < floorSize; j++){
                     boolean light =j%2==0;
                     //(byte)(light?0x000000f5:0x00000035);
                     world.Insert(new ByteVoxel((byte)(j^i)), new IntPosition(i,j,-1));
