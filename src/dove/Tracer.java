@@ -74,7 +74,7 @@ public class Tracer {
     }
     
     private ByteVoxel trace(Ray r){
-        ByteVoxel ret = null;
+        ByteVoxel ret = new NullVoxel((byte)0);
         
         IntPosition p0 = r.start;
         IntPosition p1 = r.finish;
@@ -130,7 +130,9 @@ public class Tracer {
     
     //starting point
     p = new IntPosition(p0);
-    //step through longest delta (which we have swapped to x)
+    IntPosition lastVisited = new IntPosition(p);
+    
+//step through longest delta (which we have swapped to x)
     //for x = x0 to x1 step step_x
     for (; (p0.x<p1.x)?(p.x <=p1.x):(p.x >=p1.x); p.x += step.x){  
         c = new IntPosition(p);
@@ -150,9 +152,11 @@ public class Tracer {
         //passes through this point
         debugmsg(":" + cx + ", " + cy + ", " + cz)
         */
-        ret = world.Get(c);
-        if (!ret.isEmpty()) return ret;
-        
+        if(p.differsOnLevel(lastVisited, ret.ID)){
+            ret = world.Get(c);
+            if (!ret.isEmpty()) return ret;
+            lastVisited.Copy(p);
+        }
         //update progress in other planes
         drift_xy -= delta.y;
         drift_xz -= delta.z;

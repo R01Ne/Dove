@@ -22,7 +22,7 @@ public class NullTree extends OctTreeNode{
 
     @Override
     public ByteVoxel Get(IntPosition p) {
-        return nullVoxel;
+        return new NullVoxel((byte)(level+1));
     }
 
     @Override

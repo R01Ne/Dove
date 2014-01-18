@@ -28,6 +28,14 @@ public class IntPosition {
         
     }
     
+    public boolean differsOnLevel(IntPosition pos,int level){
+        int pattern = -1<<(level);
+        
+        return (((pos.x^this.x)&pattern)!=0) || 
+                (((pos.y^this.y)&pattern)!=0) ||
+                (((pos.z^this.z)&pattern)!=0)  ;
+    }
+    
     public int SubIndex(int level,int levelMask){
         assert ((1<<level)^levelMask)==0;
         int ret = ((x&levelMask)>>level);
