@@ -14,7 +14,6 @@ import java.io.Writer;
  * @author Jonas
  */
 public class NullTree extends OctTreeNode{
-    public static NullVoxel nullVoxel = new NullVoxel((byte)0);
     public NullTree(int level) {
         super();
         this.level = level;
@@ -22,12 +21,12 @@ public class NullTree extends OctTreeNode{
 
     @Override
     public ByteVoxel Get(IntPosition p) {
-        return new NullVoxel((byte)(level+1));
+        return VoxelBatch.nullVoxels[level+1];
     }
 
     @Override
     public void Insert(ByteVoxel v, IntPosition p) {
-        int i = 1/0;
+        
     }
 
 

@@ -74,7 +74,7 @@ public class Tracer {
     }
     
     private ByteVoxel trace(Ray r){
-        ByteVoxel ret = new NullVoxel((byte)0);
+        ByteVoxel ret = VoxelBatch.nullVoxels[0];
         
         IntPosition p0 = r.start;
         IntPosition p1 = r.finish;
@@ -82,8 +82,7 @@ public class Tracer {
         
         boolean swap_xy, swap_xz;
         int drift_xy, drift_xz;
-        
-        boolean isEmpty = false;
+        int bitMap;
     //'steep' xy Line, make longest delta x plane  
     swap_xy = Math.abs(p1.y - p0.y) > Math.abs(p1.x - p0.x);
     
@@ -110,7 +109,6 @@ public class Tracer {
         p1.x = p1.z;
         p1.z = temp;
     }
-    //r.performSwap();
     //delta is Length in each plane
     delta = new IntPosition(
             Math.abs(p1.x - p0.x),
@@ -119,8 +117,8 @@ public class Tracer {
     
     //drift controls when to step in 'shallow' planes
     //starting value keeps Line centred
-    drift_xy  = (delta.x /2);
-    drift_xz  = (delta.x /2);
+    drift_xy  = (delta.x >>1);
+    drift_xz  = (delta.x >>1);
     
     //direction of line
     step = new IntPosition(
@@ -130,13 +128,15 @@ public class Tracer {
     
     //starting point
     p = new IntPosition(p0);
+    c = new IntPosition(p0);
     IntPosition lastVisited = new IntPosition(p);
     
 //step through longest delta (which we have swapped to x)
     //for x = x0 to x1 step step_x
-    for (; (p0.x<p1.x)?(p.x <=p1.x):(p.x >=p1.x); p.x += step.x){  
-        c = new IntPosition(p);
-        
+    boolean positiveDirection = p0.x<p1.x;
+    for (; positiveDirection?(p.x <=p1.x):(p.x >=p1.x); p.x += step.x){  
+
+        c.Copy(p);
         if (swap_xz) {
             int temp = c.x;
             c.x = c.z;
@@ -148,14 +148,10 @@ public class Tracer {
             c.x = c.y;
             c.y= temp;
         }
-       /* 
-        //passes through this point
-        debugmsg(":" + cx + ", " + cy + ", " + cz)
-        */
         if(p.differsOnLevel(lastVisited, ret.ID)){
+            lastVisited.Copy(p);
             ret = world.Get(c);
             if (!ret.isEmpty()) return ret;
-            lastVisited.Copy(p);
         }
         //update progress in other planes
         drift_xy -= delta.y;
@@ -166,13 +162,11 @@ public class Tracer {
             p.y += step.y;
             drift_xy += delta.x;
         }
-        
         //same in z
         if (drift_xz < 0) { 
             p.z += step.z;
             drift_xz += delta.x;
-        }
-    
+        }        
       }
       return ret;
     }

@@ -10,6 +10,7 @@ import dove.ByteVoxel;
 import dove.IntPosition;
 import dove.OctTreeNode;
 import dove.Tracer;
+import dove.VoxelBatch;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -49,17 +50,17 @@ public class Demo extends javax.swing.JPanel {
             OctTreeNode world = new OctTreeNode(7);
             //OctTreeNode.fillCube(world, new IntPosition(12,1,1), new IntPosition(14,5,5), new ByteVoxel((byte)0x78));
             //OctTreeNode.fillCube(world, new IntPosition(1,12,1), new IntPosition(2,15,5), new ByteVoxel((byte)0xA8));
-world.Insert(new ByteVoxel((byte)0xa5), new IntPosition(14,4,4));
-world.Insert(new ByteVoxel((byte)0xc5), new IntPosition(14,3,4));
-world.Insert(new ByteVoxel((byte)0xf5), new IntPosition(14,4,3));
-world.Insert(new ByteVoxel((byte)0x85), new IntPosition(14,3,3));
+world.Insert(VoxelBatch.batch[0xa5], new IntPosition(14,4,4));
+world.Insert(VoxelBatch.batch[0xc5], new IntPosition(14,3,4));
+world.Insert(VoxelBatch.batch[0xf5], new IntPosition(14,4,3));
+world.Insert(VoxelBatch.batch[0x85], new IntPosition(14,3,3));
 
             int floorSize = 100;
             for(int i = -floorSize; i < floorSize; i++){
                 for (int j = -floorSize; j < floorSize; j++){
                     boolean light =j%2==0;
                     //(byte)(light?0x000000f5:0x00000035);
-                    world.Insert(new ByteVoxel((byte)(j^i)), new IntPosition(i,j,-1));
+                    world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(i,j,-1));
 
                 }
             }
@@ -67,12 +68,13 @@ world.Insert(new ByteVoxel((byte)0x85), new IntPosition(14,3,3));
             Tracer t = new Tracer();
             t.init();
             t.setWorld(world);
-            t.cam.SetBackPlaneDistance(100);
+            t.cam.SetBackPlaneDistance(200);
 
             t.cam.x = 0;
             t.cam.y = 0;
             t.cam.z = 10;
             //t.cam.horizontalAngle = Math.PI/4;
+            t.cam.verticalAngle=-Math.PI/8;
             int frames = 0;
             int[] mem = new int[300 * 240];
             long start = System.currentTimeMillis();

@@ -7,7 +7,6 @@
 package dove;
 
 import java.io.Reader;
-import java.io.Reader;
 import java.io.Writer;
 
 
@@ -27,7 +26,7 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
             this.SubTree = new ByteVoxel[8];
             for (int i = 0; i < 8 ; i++)
             {
-                this.SubTree[i] = NullTree.nullVoxel;
+                this.SubTree[i] = VoxelBatch.nullVoxels[0];
             }
         }else{
             this.SubTree= new OctTreeNode[8];
