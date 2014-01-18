@@ -101,7 +101,8 @@ public class Camera {
             ret[i] = new Ray[height];
             for(int j = 0;j < height; j++)
             {
-                ret[i][j] = new Ray(position,intermediate(lineUpper,lineLower,((double)j)/((double)height-1)));
+                
+                ret[i][j] = Ray.Generate(new IntPosition(position),intermediate(lineUpper,lineLower,((double)j)/((double)height-1)));
             }
         }
         return ret;

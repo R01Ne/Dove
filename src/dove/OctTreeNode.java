@@ -60,6 +60,13 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public int minCoordinate(){
+        return -1>>>level;
+    }
+    public int maxCoordinate(){
+        return 1<<level;
+    }
+    
     public static void fillCube(OctTreeNode node, IntPosition min, IntPosition max, ByteVoxel voxel){
                 
         for(int x = min.x; x < max.x; x++)
@@ -67,9 +74,7 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
         {for (int z = min.z; z<max.z;z++)
         {  node.Insert(voxel, new IntPosition(x,y,z));
         }}}
-            
         
-
     }
     
 }

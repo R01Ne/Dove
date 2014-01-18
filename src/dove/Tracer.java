@@ -17,16 +17,17 @@ import java.util.Hashtable;
  */
 public class Tracer {
     OctTreeNode world;
-    HashMap<Byte, Color> voxelColors;
+    Color[] voxelColors;
     public Camera cam;
     boolean isInitialized = false;
     
     public void init(){
-        voxelColors = new HashMap<>();
+        voxelColors = new Color[256];
         
         for(int b = 0; b < 0x00ff;b++){
-            voxelColors.put((byte)b, new Color(b,b,b));
+            voxelColors[b]= new Color(b,b,b);
         }
+        voxelColors[0x88]=Color.BLUE;
         cam = new Camera();
         isInitialized = true;
     }
@@ -39,7 +40,7 @@ public class Tracer {
             for(int y = 0; y < height;y++){
                 Ray r = rays[x][y];
                 r.voxel= trace(r);
-                raster[x+width*y] = r.voxel!=null?Color.BLACK.getRGB():Color.BLUE.getRGB();
+                raster[x+width*y] = r.voxel!=null?voxelColors[0x000000ff&r.voxel.ID].getRGB():Color.black.getRGB();
                 
             }
         }
@@ -81,10 +82,10 @@ public class Tracer {
         
         boolean swap_xy, swap_xz;
         int drift_xy, drift_xz;
-
-    
+        
     //'steep' xy Line, make longest delta x plane  
     swap_xy = Math.abs(p1.y - p0.y) > Math.abs(p1.x - p0.x);
+    
     if (swap_xy) {
         //Swap(x0, y0)
         int temp = p0.x;
@@ -97,6 +98,7 @@ public class Tracer {
     }
     //do same for xz
     swap_xz = Math.abs(p1.z - p0.z) > Math.abs(p1.x - p0.x);  
+    
     if (swap_xz) {
         //Swap(x0, y0)
         int temp = p0.x;
@@ -107,13 +109,14 @@ public class Tracer {
         p1.x = p1.z;
         p1.z = temp;
     }
+    //r.performSwap();
     //delta is Length in each plane
     delta = new IntPosition(Math.abs(p1.x - p0.x),Math.abs(p1.y - p0.y),Math.abs(p1.z - p0.z));
     
     //drift controls when to step in 'shallow' planes
     //starting value keeps Line centred
-    drift_xy  = (delta.x >> 1);
-    drift_xz  = (delta.x >> 1);
+    drift_xy  = (delta.x /2);
+    drift_xz  = (delta.x /2);
     
     //direction of line
     step = new IntPosition(p0.x > p1.x? -1:1,p0.y > p1.y? -1:1,p0.z > p1.z? -1:1);

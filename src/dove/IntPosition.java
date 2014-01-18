@@ -29,9 +29,12 @@ public class IntPosition {
     }
     
     public int SubIndex(int level,int levelMask){
+        assert (level^levelMask)==0;
         int ret = ((x&levelMask)>>level);
         ret |= (((y&levelMask)>>level)<<1);
-        return ret | (((z&levelMask)>>level)<<2);
+        ret |= (((z&levelMask)>>level)<<2);
+        assert 0<=ret && ret <=7;
+        return ret;
     }
     
     public void Copy(IntPosition p){

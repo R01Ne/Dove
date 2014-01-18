@@ -55,20 +55,111 @@ public class OctTreeNodeTest {
         assertEquals(v, result);
     }
 
+    
+    /**
+     * Test of Insert method, of class OctTreeNode.
+     */
+    @Test
+    public void testInsertNegX() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(-1,2,3);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
 
+        /**
+     * Test of Insert method, of class OctTreeNode.
+     */
+    @Test
+    public void testInsertNegY() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(1,-2,3);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
+
+        /**
+     * Test of Insert method, of class OctTreeNode.
+     */
+    @Test
+    public void testInsertNegZ() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(1,2,-3);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
+
+    @Test
+    public void testInsertNegXZ() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(-7,2,-3);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
+
+        @Test
+    public void testInsertNegXY() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(-7,-2,3);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
+    public void testInsertNegXYZ() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(-7,-2,-3);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
+
+   @Test
+    public void testInsertXYZ() {
+        System.out.println("Insert neg");
+        ByteVoxel v = new ByteVoxel((byte)0x01);
+        IntPosition p = new IntPosition(-10,-3,0);
+        OctTreeNode instance = new OctTreeNode(5);
+        instance.Insert(v, p);
+        
+        ByteVoxel result = instance.Get(p);
+        assertEquals(v, result);
+    }
+    
     /**
      * Test of Trace method, of class OctTreeNode.
      */
     @Test
     public void testTrace() {
         System.out.println("Trace");
-        Ray r = new Ray(new IntPosition(0,0,0), new IntPosition(10,0,0));
+        Ray r = Ray.Generate(new IntPosition(0,0,0), new IntPosition(10,0,0));
         ByteVoxel v = new ByteVoxel((byte)0x01);
         OctTreeNode instance = FillBlock(new IntPosition(1,1,1), new IntPosition(5,5,5),v);
         boolean expResult = false;
         boolean result = instance.Trace(r);
         assertEquals(expResult, result);
-        r = new Ray(new IntPosition(0,2,2), new IntPosition(10,2,2));
+        r = Ray.Generate(new IntPosition(0,2,2), new IntPosition(10,2,2));
         assertEquals(true, instance.Trace(r));
 
     }
