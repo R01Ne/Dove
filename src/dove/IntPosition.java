@@ -29,7 +29,7 @@ public class IntPosition {
     }
     
     public int SubIndex(int level,int levelMask){
-        assert (level^levelMask)==0;
+        assert ((1<<level)^levelMask)==0;
         int ret = ((x&levelMask)>>level);
         ret |= (((y&levelMask)>>level)<<1);
         ret |= (((z&levelMask)>>level)<<2);

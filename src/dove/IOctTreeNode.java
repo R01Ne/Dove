@@ -22,4 +22,5 @@ public interface IOctTreeNode<Voxel,Position> {
     public boolean Trace(Ray r);
     public void Serialize(Writer writer);
     public void Deserialize(Reader reader);    
+    public boolean isEmpty();
 }

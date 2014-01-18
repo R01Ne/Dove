@@ -7,17 +7,36 @@
 package dove;
 
 import java.io.Reader;
+import java.io.Reader;
 import java.io.Writer;
 
 
 public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
 
+    protected OctTreeNode(){
+        
+    }
+    
     IOctTreeNode<ByteVoxel,IntPosition>[] SubTree; 
     int levelMask = 1;
     int level = 1;
     public OctTreeNode(int level){
-        this.SubTree = level==1?new ByteVoxel[8]:new OctTreeNode[8];
         SetLevel(level);
+
+        if (level == 1){
+            this.SubTree = new ByteVoxel[8];
+            for (int i = 0; i < 8 ; i++)
+            {
+                this.SubTree[i] = NullTree.nullVoxel;
+            }
+        }else{
+            this.SubTree= new OctTreeNode[8];
+            for (int i = 0; i < 8 ; i++)
+            {
+                this.SubTree[i] = new NullTree((byte)(level-1));
+            }
+        }
+            
     
     }
     
@@ -33,7 +52,7 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
         if (level == 1){
             SubTree[i] = v;
         }else{
-            if (SubTree[i] == null) SubTree[i] = new OctTreeNode(level-1);
+            if (SubTree[i].isEmpty()) SubTree[i] = new OctTreeNode(level-1);
             SubTree[i].Insert(v, p);
         }
     }
@@ -41,8 +60,7 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
 
     @Override
     public ByteVoxel Get(IntPosition p) {
-        IOctTreeNode<ByteVoxel, IntPosition> st =  SubTree[p.SubIndex(level, levelMask)];
-        return st == null? null:st.Get(p);
+        return SubTree[p.SubIndex(level, levelMask)].Get(p);
     }
 
     @Override
@@ -75,6 +93,12 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
         {  node.Insert(voxel, new IntPosition(x,y,z));
         }}}
         
+    }
+
+
+    @Override
+    public boolean isEmpty() {
+        return false;
     }
     
 }

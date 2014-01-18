@@ -83,6 +83,7 @@ public class Tracer {
         boolean swap_xy, swap_xz;
         int drift_xy, drift_xz;
         
+        boolean isEmpty = false;
     //'steep' xy Line, make longest delta x plane  
     swap_xy = Math.abs(p1.y - p0.y) > Math.abs(p1.x - p0.x);
     
@@ -150,7 +151,8 @@ public class Tracer {
         debugmsg(":" + cx + ", " + cy + ", " + cz)
         */
         ret = world.Get(c);
-        if (ret!= null) return ret;
+        if (!ret.isEmpty()) return ret;
+        
         //update progress in other planes
         drift_xy -= delta.y;
         drift_xz -= delta.z;

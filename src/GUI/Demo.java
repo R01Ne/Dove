@@ -46,7 +46,7 @@ public class Demo extends javax.swing.JPanel {
         }
         @Override
         protected Void doInBackground() throws Exception{
-            OctTreeNode world = new OctTreeNode(10);
+            OctTreeNode world = new OctTreeNode(7);
             //OctTreeNode.fillCube(world, new IntPosition(12,1,1), new IntPosition(14,5,5), new ByteVoxel((byte)0x78));
             //OctTreeNode.fillCube(world, new IntPosition(1,12,1), new IntPosition(2,15,5), new ByteVoxel((byte)0xA8));
 world.Insert(new ByteVoxel((byte)0xa5), new IntPosition(14,4,4));
