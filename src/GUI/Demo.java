@@ -7,6 +7,7 @@
 package GUI;
 
 import dove.ByteVoxel;
+import dove.Camera;
 import dove.IntPosition;
 import dove.OctTreeNode;
 import dove.Tracer;
@@ -29,8 +30,10 @@ import javax.swing.SwingWorker;
  */
 public class Demo extends javax.swing.JPanel {
     private Image src = null;
+    private DemoKeyListener mDemoKeyListener;
     
-    public Demo() {
+    public Demo(DemoKeyListener demoKeyListener) {
+        mDemoKeyListener = demoKeyListener;
         new Worker().execute();
     }
     protected void paintComponent(Graphics g) {
@@ -50,10 +53,10 @@ public class Demo extends javax.swing.JPanel {
             OctTreeNode world = new OctTreeNode(7);
             //OctTreeNode.fillCube(world, new IntPosition(12,1,1), new IntPosition(14,5,5), new ByteVoxel((byte)0x78));
             //OctTreeNode.fillCube(world, new IntPosition(1,12,1), new IntPosition(2,15,5), new ByteVoxel((byte)0xA8));
-world.Insert(VoxelBatch.batch[0xa5], new IntPosition(14,4,4));
-world.Insert(VoxelBatch.batch[0xc5], new IntPosition(14,3,4));
-world.Insert(VoxelBatch.batch[0xf5], new IntPosition(14,4,3));
-world.Insert(VoxelBatch.batch[0x85], new IntPosition(14,3,3));
+            world.Insert(VoxelBatch.batch[0xa5], new IntPosition(14,4,4));
+            world.Insert(VoxelBatch.batch[0xc5], new IntPosition(14,3,4));
+            world.Insert(VoxelBatch.batch[0xf5], new IntPosition(14,4,3));
+            world.Insert(VoxelBatch.batch[0x85], new IntPosition(14,3,3));
 
             int floorSize = 100;
             for(int i = -floorSize; i < floorSize; i++){
@@ -80,12 +83,20 @@ world.Insert(VoxelBatch.batch[0x85], new IntPosition(14,3,3));
             long start = System.currentTimeMillis();
             long end = start + 15000;
             long last = start;
-            while (last < end){
-                int col = colors[frames % colors.length].getRGB();
-                t.Render(mem,300,240);
-                t.cam.horizontalAngle +=Math.PI/16 ;
+            boolean runForever = true;
+            
+            while (last < end || runForever){
                 
-//for (int y = 0; y < 768; y++)
+                readInputAndUpdateCamera(t.cam);
+                
+                int col = colors[frames % colors.length].getRGB();
+                
+                t.Render(mem,300,240);
+                
+                //TODO: Re-Enable this
+                //t.cam.horizontalAngle +=Math.PI/16 ;
+                
+                //for (int y = 0; y < 768; y++)
                 //    for (int x = 0; x < 1024; x++)
                 //        mem[x + y * 1024] = col;
                 Image img = createImage(new MemoryImageSource(300,240, mem, 0, 300));
@@ -100,13 +111,57 @@ world.Insert(VoxelBatch.batch[0x85], new IntPosition(14,3,3));
             System.err.println("Frames = " + frames + ", fps = " + ((double) frames / (last - start) * 1000));
             return null;
         }
+        
+        //TODO: Change this to something better
+        //TODO: Add ESC to exit
+        private void readInputAndUpdateCamera(Camera cam) {
+            int angle = mDemoKeyListener.getKeyDirectionAngle();
+            if (mDemoKeyListener.getMoveState()) {
+                switch(angle) {
+                    case 0:
+                        cam.x += 1;
+                        break;
+                    case 45:
+                        cam.x += 1;
+                        cam.y += 1;
+                        break;
+                    case 90:
+                        cam.y += 1;
+                        break;
+                    case 135:
+                        cam.y += 1;
+                        cam.x -= 1;
+                        break;
+                    case -180:
+                        cam.x -= 1;
+                        break;
+                    case -135:
+                        cam.x -= 1;
+                        cam.y -= 1;
+                        break;
+                    case -90:
+                        cam.y -= 1;
+                        break;
+                    case -45:
+                        cam.y -= 1;
+                        cam.x += 1;
+                        break;   
+                }
+            }
+        }
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run(){
+                
+                DemoKeyListener demoKeyListener = new DemoKeyListener();
+                
                 JFrame jf = new JFrame();
-                jf.getContentPane().add(new Demo(), BorderLayout.CENTER);
+                jf.addKeyListener(demoKeyListener);
+                
+                
+                jf.getContentPane().add(new Demo(demoKeyListener), BorderLayout.CENTER);
                 jf.setSize(300,240);
                 jf.setVisible(true);
                 jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
