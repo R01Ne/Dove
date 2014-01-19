@@ -53,12 +53,11 @@ public class CameraTest {
         instance.SetBackPlaneDistance(100);
         instance.horizontalAngle = 0;
         instance.verticalAngle = Math.PI/2;
-        Ray[][] expResult = null;
-        Ray[][] result = instance.generateRays(width, height);
-        for(Ray[] rs : result){
-            for (Ray r : rs){
+        Ray[] expResult = null;
+        Ray[] result = instance.generateRays(width, height);
+        for(Ray r : result){
                 System.out.println(r.finish);
-            }
+            
         }
         
         assertArrayEquals(expResult, result);

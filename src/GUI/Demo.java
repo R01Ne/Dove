@@ -92,7 +92,7 @@ public class Demo extends javax.swing.JPanel {
                 
                 readInputAndUpdateCamera(t.cam);
                 
-                int col = colors[frames % colors.length].getRGB();
+//                int col = colors[frames % colors.length].getRGB();
                 
                 t.Render(mem,300,240);
                 

@@ -23,12 +23,13 @@ public class Camera {
     
     private Ray[] rayBuffer;
     
+    
     IntPosition lowerLeft = new IntPosition(0,0,0), 
             lowerRight = new IntPosition(1,0,0), 
             upperLeft = new IntPosition(0,1,0), 
             upperRight = new IntPosition(1,1,0);
     IntPosition position = new IntPosition((int)x,(int)y,(int)z);
-
+    private IntPosition lineUpper = new IntPosition(),lineLower = new IntPosition(), temp = new IntPosition();
     
     public void SetBackPlaneDistance(double dist){
         backplaneDistance = dist;
@@ -89,10 +90,10 @@ public class Camera {
      * @param scale
      * @return 
      */
-    private IntPosition intermediate(IntPosition p1, IntPosition p2, double scale){
-        return new IntPosition(intermediate(p1.x,p2.x,scale),
-                intermediate(p1.y,p2.y,scale),
-                intermediate(p1.z,p2.z,scale));
+    private void intermediate(IntPosition target, IntPosition p1, IntPosition p2, double scale){
+        target.x = intermediate(p1.x,p2.x,scale);
+        target.y = intermediate(p1.y,p2.y,scale);
+        target.z = intermediate(p1.z,p2.z,scale);
     }
     //x+ (y-x)*
     private int intermediate(int x, int y, double scale){
@@ -107,14 +108,15 @@ public class Camera {
         int rayIndex = 0;
         for(int i = 0; i < width; i++)
         {
-            IntPosition lineUpper = intermediate(upperLeft,upperRight, ((double)i)/(((double)width)-1));
-            IntPosition lineLower = intermediate(lowerLeft,lowerRight, ((double)i)/(((double)width)-1));
+            intermediate(lineUpper,upperLeft,upperRight, ((double)i)/(((double)width)-1));
+            intermediate(lineLower,lowerLeft,lowerRight, ((double)i)/(((double)width)-1));
             
             
             //ret[i] = new Ray[height];
             for(int j = 0;j < height; j++)
             {
-                rayBuffer[rayIndex++].Reset(position,intermediate(lineUpper,lineLower,((double)j)/((double)height-1)));
+                intermediate(temp,lineUpper,lineLower,((double)j)/((double)height-1));
+                rayBuffer[rayIndex++].Reset(position,temp);
             }
         }
         return rayBuffer;

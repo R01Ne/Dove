@@ -15,6 +15,10 @@ public class IntPosition {
     public int y;
     public int z;
             
+    public IntPosition(){
+        this(0,0,0);
+    }
+    
     public IntPosition(int x, int y, int z) {
         this.x= x;
         this.y = y;
@@ -26,6 +30,12 @@ public class IntPosition {
         this.y = p0.y;
         this.z = p0.z;
         
+    }
+    
+    public void set(int x, int y, int z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
     
     public boolean differsOnLevel(IntPosition pos,int level){

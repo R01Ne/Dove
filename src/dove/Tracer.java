@@ -76,13 +76,15 @@ public class Tracer {
             }
         }
     }
+    IntPosition delta = new IntPosition(),step = new IntPosition(),p = new IntPosition(),c=new IntPosition();
+    IntPosition lastVisited  = new IntPosition();
     
     private ByteVoxel trace(Ray r){
         ByteVoxel ret = VoxelBatch.nullVoxels[0];
         
         IntPosition p0 = r.start;
         IntPosition p1 = r.finish;
-        IntPosition delta,step,p,c;
+        //IntPosition delta,step,p,c;
         
         boolean swap_xy, swap_xz;
         int drift_xy, drift_xz;
@@ -114,7 +116,7 @@ public class Tracer {
         p1.z = temp;
     }
     //delta is Length in each plane
-    delta = new IntPosition(
+    delta.set(
             Math.abs(p1.x - p0.x),
             Math.abs(p1.y - p0.y),
             Math.abs(p1.z - p0.z));
@@ -125,15 +127,15 @@ public class Tracer {
     drift_xz  = (delta.x >>1);
     
     //direction of line
-    step = new IntPosition(
+    step.set(
             p0.x > p1.x? -1:1,
             p0.y > p1.y? -1:1,
             p0.z > p1.z? -1:1);
     
     //starting point
-    p = new IntPosition(p0);
-    c = new IntPosition(p0);
-    IntPosition lastVisited = new IntPosition(p);
+    p.Copy(p0);
+    c.Copy(p0);
+    lastVisited.Copy(p);
     
 //step through longest delta (which we have swapped to x)
     //for x = x0 to x1 step step_x
