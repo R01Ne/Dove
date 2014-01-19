@@ -87,7 +87,8 @@ public class Demo extends javax.swing.JPanel {
             long end = start + 15000;
             long last = start;
             boolean runForever = false;
-            
+            BufferedImage bi = new BufferedImage(300, 240, BufferedImage.TYPE_INT_ARGB);
+                
             while (last < end || runForever){
                 
                 readInputAndUpdateCamera(t.cam);
@@ -100,7 +101,6 @@ public class Demo extends javax.swing.JPanel {
                 if (!runForever)t.cam.horizontalAngle +=Math.PI/16 ;
                 
                 Image img = createImage(new MemoryImageSource(300,240, mem, 0, 300));
-                BufferedImage bi = new BufferedImage(300, 240, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2 = bi.createGraphics();
                 g2.drawImage(img, 0, 0, null);
                 g2.dispose();
