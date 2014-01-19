@@ -35,11 +35,11 @@ public class Tracer {
         public void Render(int[] raster, int width, int height){
         //calculate view frustrum
         if (!isInitialized) init();
-        Ray[][] rays = cam.generateRays(width, height);
+        Ray[] rays = cam.generateRays(width, height);
+        for (Ray r : rays) r.voxel = trace(r);
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height;y++){
-                Ray r = rays[x][y];
-                r.voxel= trace(r);
+                Ray r = rays[(x*height) +y];
                 raster[x+width*y] = r.voxel!=null?voxelColors[0x000000ff&r.voxel.ID].getRGB():Color.black.getRGB();
                 
             }
@@ -50,18 +50,22 @@ public class Tracer {
     public void Render(WritableRaster raster){
         //calculate view frustrum
         if (!isInitialized) init();
-        Ray[][] rays = cam.generateRays(raster.getWidth(), raster.getHeight());
+        Ray[] rays = cam.generateRays(raster.getWidth(), raster.getHeight());
+        
+        for(Ray r : rays) r.voxel=trace(r);
+        
+        /*
         for(int x = 0; x < raster.getWidth(); x++){
             for(int y = 0; y < raster.getHeight();y++){
                 Ray r = rays[x][y];
                 r.voxel= trace(r);
             }
-        }
+        }*/
         
         
         for(int x = 0; x < raster.getWidth(); x++){
             for(int y = 0; y < raster.getHeight();y++){
-                ByteVoxel v = rays[x][y].voxel;
+                ByteVoxel v = rays[x*raster.getWidth() + y].voxel;
                 if (v != null) {
                     //raster.setPixel(x, y, voxelColors.get(v.ID).getColorComponents(new float[3]));
                     raster.setPixel(y, y, Color.RED.getColorComponents(new float[4]));

@@ -10,7 +10,7 @@ package dove;
  *
  * @author Jonas
  */
-public abstract class Ray {
+public class Ray {
     protected IntPosition start;
     protected IntPosition finish;
     protected IntPosition delta;
@@ -18,6 +18,11 @@ public abstract class Ray {
     protected TraversalRecord state;
 
     public ByteVoxel voxel;
+
+    Ray() {
+        start = new IntPosition(0,0,0);
+        finish = new IntPosition(0,0,0);
+    }
     
     public IntPosition getStart() {
         return start;
@@ -55,6 +60,11 @@ public abstract class Ray {
         this.finish = finish;
     }
     
+    public void Reset(IntPosition st, IntPosition fi){
+        start.Copy(st);
+        finish.Copy(fi);
+    }
+    
     /**
      * Reset the ray to start position
      */
@@ -67,7 +77,6 @@ public abstract class Ray {
     public String toString(){
         return "Ray: [" + start + " -> " + finish + "]";
     }
-    public abstract void performSwap();
 
     public ByteVoxel Step(){
         ByteVoxel ret = null;
@@ -151,7 +160,7 @@ public abstract class Ray {
       return ret;
     }
     
-    public static Ray Generate(IntPosition p0, IntPosition p1){
+    public static Ray _Generate(IntPosition p0, IntPosition p1){
           boolean swap_xy = Math.abs(p1.y - p0.y) > Math.abs(p1.x - p0.x);
           boolean swap_xz = Math.abs(p1.z - p0.z) > Math.abs(p1.x - p0.x);  
 
@@ -176,9 +185,6 @@ public abstract class Ray {
             super(start, finish);
         }
 
-        @Override
-        public void performSwap() {
-        }
         
         
 
@@ -188,16 +194,6 @@ public abstract class Ray {
         public SwapXYRay(IntPosition start, IntPosition finish) {
             super(start, finish);
         }
-        @Override
-        public void performSwap() {
-            int temp = start.x;
-            start.x = start.y;
-            start.y= temp;
-            //Swap(x1, y1)
-            temp = finish.x;
-            finish.x = finish.y;
-            finish.y = temp;
-        }
     }
     protected static class SwapXZRay extends Ray{
         
@@ -205,16 +201,6 @@ public abstract class Ray {
             super(start, finish);
         }
         
-        @Override
-        public void performSwap() {
-            int temp = start.x;
-            start.x = start.z;
-            start.z= temp;
-            //Swap(x1, y1)
-            temp = finish.x;
-            finish.x = finish.z;
-            finish.z = temp;
-        }
     }
     protected static class SwapXYXZRay extends Ray{
 
@@ -222,24 +208,6 @@ public abstract class Ray {
             super(start, finish);
         }
         
-        @Override
-        public void performSwap() {
-            int temp = start.x;
-            start.x = start.y;
-            start.y= temp;
-            //Swap(x1, y1)
-            temp = finish.x;
-            finish.x = finish.y;
-            finish.y = temp;
-            
-            temp = start.x;
-            start.x = start.z;
-            start.z= temp;
-            //Swap(x1, y1)
-            temp = finish.x;
-            finish.x = finish.z;
-            finish.z = temp;
-        }
     
     }
     

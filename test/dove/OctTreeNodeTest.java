@@ -153,13 +153,13 @@ public class OctTreeNodeTest {
     @Test
     public void testTrace() {
         System.out.println("Trace");
-        Ray r = Ray.Generate(new IntPosition(0,0,0), new IntPosition(10,0,0));
+        Ray r = new Ray(new IntPosition(0,0,0), new IntPosition(10,0,0));
         ByteVoxel v = new ByteVoxel((byte)0x01);
         OctTreeNode instance = FillBlock(new IntPosition(1,1,1), new IntPosition(5,5,5),v);
         boolean expResult = false;
         boolean result = instance.Trace(r);
         assertEquals(expResult, result);
-        r = Ray.Generate(new IntPosition(0,2,2), new IntPosition(10,2,2));
+        r = new Ray(new IntPosition(0,2,2), new IntPosition(10,2,2));
         assertEquals(true, instance.Trace(r));
 
     }

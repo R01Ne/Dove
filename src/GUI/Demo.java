@@ -86,7 +86,7 @@ public class Demo extends javax.swing.JPanel {
             long start = System.currentTimeMillis();
             long end = start + 15000;
             long last = start;
-            boolean runForever = true;
+            boolean runForever = false;
             
             while (last < end || runForever){
                 

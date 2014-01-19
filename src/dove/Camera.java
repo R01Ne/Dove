@@ -21,20 +21,31 @@ public class Camera {
     
     private double adjBackplaneDistance = backplaneDistance*(1/Math.sin(verticalView));
     
+    private Ray[] rayBuffer;
+    
+    IntPosition lowerLeft = new IntPosition(0,0,0), 
+            lowerRight = new IntPosition(1,0,0), 
+            upperLeft = new IntPosition(0,1,0), 
+            upperRight = new IntPosition(1,1,0);
+    IntPosition position = new IntPosition((int)x,(int)y,(int)z);
+
+    
     public void SetBackPlaneDistance(double dist){
         backplaneDistance = dist;
         adjBackplaneDistance = dist*(1/Math.cos(verticalView));
     
     }
-    
-    
-    IntPosition lowerLeft = new IntPosition(0,0,0), lowerRight = new IntPosition(1,0,0), upperLeft = new IntPosition(0,1,0), upperRight = new IntPosition(1,1,0);
-
-    IntPosition position = new IntPosition((int)x,(int)y,(int)z);
-    
+ 
     public Camera(){
+        initRayBuffer(1,1);
     }
     
+    private void initRayBuffer(int width, int height){
+        rayBuffer = new Ray[width*height];
+        for (int i = 0 ; i < width*height; i++){
+            rayBuffer[i] = new Ray();
+        }
+    }
     
     private void updateIntPositions(){
         position = new IntPosition((int)x,(int)y,(int)z);
@@ -89,23 +100,24 @@ public class Camera {
     }
     
     
-    public Ray[][] generateRays(int width, int height){
-        Ray[][] ret = new Ray[width][];
+    public Ray[] generateRays(int width, int height){
+        if (rayBuffer.length != width*height) initRayBuffer(width, height);
+        //Ray[][] ret = new Ray[width][];
         updateIntPositions();
+        int rayIndex = 0;
         for(int i = 0; i < width; i++)
         {
             IntPosition lineUpper = intermediate(upperLeft,upperRight, ((double)i)/(((double)width)-1));
             IntPosition lineLower = intermediate(lowerLeft,lowerRight, ((double)i)/(((double)width)-1));
             
             
-            ret[i] = new Ray[height];
+            //ret[i] = new Ray[height];
             for(int j = 0;j < height; j++)
             {
-                
-                ret[i][j] = Ray.Generate(new IntPosition(position),intermediate(lineUpper,lineLower,((double)j)/((double)height-1)));
+                rayBuffer[rayIndex++].Reset(position,intermediate(lineUpper,lineLower,((double)j)/((double)height-1)));
             }
         }
-        return ret;
+        return rayBuffer;
     }
     
 }
