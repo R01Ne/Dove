@@ -14,7 +14,7 @@ public class IntPosition {
     public int x;
     public int y;
     public int z;
-
+            
     public IntPosition(int x, int y, int z) {
         this.x= x;
         this.y = y;
@@ -37,13 +37,22 @@ public class IntPosition {
     }
     
     public int SubIndex(int level,int levelMask){
-        assert ((1<<level)^levelMask)==0;
+//        assert ((1<<level)^levelMask)==0;
         int ret = ((x&levelMask)>>level);
         ret |= (((y&levelMask)>>level)<<1);
         ret |= (((z&levelMask)>>level)<<2);
-        assert 0<=ret && ret <=7;
+//        assert 0<=ret && ret <=7;
         return ret;
     }
+    public static int SubIndex(IntPosition p, int level,int levelMask){
+//        assert ((1<<level)^levelMask)==0;
+        int ret = ((p.x&levelMask)>>level);
+        ret |= (((p.y&levelMask)>>level)<<1);
+        ret |= (((p.z&levelMask)>>level)<<2);
+//        assert 0<=ret && ret <=7;
+        return ret;
+    }
+
     
     public void Copy(IntPosition p){
         x=p.x;

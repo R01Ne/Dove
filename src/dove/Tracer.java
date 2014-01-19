@@ -135,20 +135,20 @@ public class Tracer {
     //for x = x0 to x1 step step_x
     boolean positiveDirection = p0.x<p1.x;
     for (; positiveDirection?(p.x <=p1.x):(p.x >=p1.x); p.x += step.x){  
+if(p.differsOnLevel(lastVisited, ret.ID)){
+        
+            c.Copy(p);
+            if (swap_xz) {
+                int temp = c.x;
+                c.x = c.z;
+                c.z= temp;
+            }
 
-        c.Copy(p);
-        if (swap_xz) {
-            int temp = c.x;
-            c.x = c.z;
-            c.z= temp;
-        }
-                
-        if (swap_xy) {
-            int temp = c.x;
-            c.x = c.y;
-            c.y= temp;
-        }
-        if(p.differsOnLevel(lastVisited, ret.ID)){
+            if (swap_xy) {
+                int temp = c.x;
+                c.x = c.y;
+                c.y= temp;
+            }
             lastVisited.Copy(p);
             ret = world.Get(c);
             if (!ret.isEmpty()) return ret;

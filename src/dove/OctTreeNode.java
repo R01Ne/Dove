@@ -10,13 +10,13 @@ import java.io.Reader;
 import java.io.Writer;
 
 
-public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
+public class OctTreeNode implements IOctTreeNode {
 
     protected OctTreeNode(){
         
     }
     
-    IOctTreeNode<ByteVoxel,IntPosition>[] SubTree; 
+    IOctTreeNode[] SubTree; 
     int levelMask = 1;
     int level = 1;
     public OctTreeNode(int level){
@@ -59,7 +59,7 @@ public class OctTreeNode implements IOctTreeNode<ByteVoxel,IntPosition> {
 
     @Override
     public ByteVoxel Get(IntPosition p) {
-        return SubTree[p.SubIndex(level, levelMask)].Get(p);
+        return SubTree[p.SubIndex(level,levelMask)].Get(p);
     }
 
     @Override

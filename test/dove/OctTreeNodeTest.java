@@ -47,7 +47,7 @@ public class OctTreeNodeTest {
     public void testInsert() {
         System.out.println("Insert");
         ByteVoxel v = new ByteVoxel((byte)0x01);
-        IntPosition p = new IntPosition(1,2,3);
+        IntPosition p = new IntPosition(7,8,9);
         OctTreeNode instance = new OctTreeNode(5);
         instance.Insert(v, p);
         

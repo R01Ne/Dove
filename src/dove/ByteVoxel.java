@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Jonas
  */
-public class ByteVoxel implements IOctTreeNode<ByteVoxel, IntPosition> {
+public class ByteVoxel implements IOctTreeNode {
     public byte ID =0;
 
     public ByteVoxel(byte i) {

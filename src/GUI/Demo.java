@@ -50,7 +50,7 @@ public class Demo extends javax.swing.JPanel {
         }
         @Override
         protected Void doInBackground() throws Exception{
-            OctTreeNode world = new OctTreeNode(7);
+            OctTreeNode world = new OctTreeNode(8);
             //OctTreeNode.fillCube(world, new IntPosition(12,1,1), new IntPosition(14,5,5), new ByteVoxel((byte)0x78));
             //OctTreeNode.fillCube(world, new IntPosition(1,12,1), new IntPosition(2,15,5), new ByteVoxel((byte)0xA8));
             world.Insert(VoxelBatch.batch[0xa5], new IntPosition(14,4,4));
@@ -58,12 +58,15 @@ public class Demo extends javax.swing.JPanel {
             world.Insert(VoxelBatch.batch[0xf5], new IntPosition(14,4,3));
             world.Insert(VoxelBatch.batch[0x85], new IntPosition(14,3,3));
 
-            int floorSize = 100;
+            int floorSize = 30;
             for(int i = -floorSize; i < floorSize; i++){
                 for (int j = -floorSize; j < floorSize; j++){
-                    boolean light =j%2==0;
-                    //(byte)(light?0x000000f5:0x00000035);
                     world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(i,j,-1));
+                    world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(-floorSize,i,j));
+                    world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(floorSize,i,j));
+                    world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(i,j,20));
+                    world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(i,floorSize,j));
+                    world.Insert(VoxelBatch.batch[(j^i)&0x000000ff], new IntPosition(i,-floorSize,j));
 
                 }
             }
@@ -94,19 +97,18 @@ public class Demo extends javax.swing.JPanel {
                 t.Render(mem,300,240);
                 
                 //TODO: Re-Enable this
-                //t.cam.horizontalAngle +=Math.PI/16 ;
+                if (!runForever)t.cam.horizontalAngle +=Math.PI/16 ;
                 
-                //for (int y = 0; y < 768; y++)
-                //    for (int x = 0; x < 1024; x++)
-                //        mem[x + y * 1024] = col;
                 Image img = createImage(new MemoryImageSource(300,240, mem, 0, 300));
                 BufferedImage bi = new BufferedImage(300, 240, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2 = bi.createGraphics();
                 g2.drawImage(img, 0, 0, null);
                 g2.dispose();
                 publish(bi);
+                
                 last = System.currentTimeMillis();
                 frames++;
+                
             }
             System.err.println("Frames = " + frames + ", fps = " + ((double) frames / (last - start) * 1000));
             return null;
