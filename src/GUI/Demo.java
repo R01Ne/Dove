@@ -95,7 +95,7 @@ public class Demo extends javax.swing.JPanel {
                 
 //                int col = colors[frames % colors.length].getRGB();
                 
-                t.Render(mem,300,240);
+                t.parallelRender(mem,300,240);
                 
                 //TODO: Re-Enable this
                 if (!runForever)t.cam.horizontalAngle +=Math.PI/16 ;

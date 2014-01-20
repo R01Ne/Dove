@@ -16,17 +16,17 @@ public class OctTreeNode implements IOctTreeNode {
         
     }
     
-    IOctTreeNode[] SubTree; 
+    private OctTreeNode[] SubTree; 
     int levelMask = 1;
     int level = 1;
     public OctTreeNode(int level){
         SetLevel(level);
 
-        if (level == 1){
-            this.SubTree = new ByteVoxel[8];
+        if (level == 2){
+            this.SubTree = new VoxelTreeNode[8];
             for (int i = 0; i < 8 ; i++)
             {
-                this.SubTree[i] = VoxelBatch.nullVoxels[0];
+                this.SubTree[i] = new VoxelTreeNode(1);
             }
         }else{
             this.SubTree= new OctTreeNode[8];
@@ -48,12 +48,8 @@ public class OctTreeNode implements IOctTreeNode {
     public void Insert(ByteVoxel v, IntPosition p) {
         int i = p.SubIndex(level, levelMask);
             
-        if (level == 1){
-            SubTree[i] = v;
-        }else{
             if (SubTree[i].isEmpty()) SubTree[i] = new OctTreeNode(level-1);
             SubTree[i].Insert(v, p);
-        }
     }
     
 

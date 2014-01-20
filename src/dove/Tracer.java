@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.image.WritableRaster;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,7 +34,7 @@ public class Tracer {
         isInitialized = true;
     }
 
-        public void Render(int[] raster, int width, int height){
+    public void Render(int[] raster, int width, int height){
         //calculate view frustrum
         if (!isInitialized) init();
         Ray[] rays = cam.generateRays(width, height);
@@ -44,6 +46,41 @@ public class Tracer {
                 
             }
         }
+
+    }    
+     
+    public void parallelRender(int[] raster, int width, int height){
+        //calculate view frustrum
+        if (!isInitialized) init();
+        Ray[] rays = cam.generateRays(width, height);
+        int threadCount = 8;
+        TracerThread[] tts = new TracerThread[threadCount]; 
+        
+        for (int i = 0; i <threadCount; i++ ){
+            tts[i] = new TracerThread(rays,((i*rays.length)/threadCount),(((i+1)*rays.length)/threadCount),world);
+            tts[i].start();
+        }
+  
+        for(TracerThread thread : tts) try {
+            thread.join();
+            
+//        for (Ray r : rays) r.voxel = trace(r);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Tracer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+//        for (Ray r : rays) r.voxel = trace(r);
+    
+        
+        
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height;y++){
+                Ray r = rays[(x*height) +y];
+                raster[x+width*y] = r.voxel!=null?voxelColors[0x000000ff&r.voxel.ID].getRGB():Color.black.getRGB();
+                
+            }
+        }
+
         
     }
     
@@ -76,6 +113,11 @@ public class Tracer {
             }
         }
     }
+    
+    private int abs(int a){
+        return a>0?a:-a;
+    }
+    
     IntPosition delta = new IntPosition(),step = new IntPosition(),p = new IntPosition(),c=new IntPosition();
     IntPosition lastVisited  = new IntPosition();
     
@@ -90,7 +132,7 @@ public class Tracer {
         int drift_xy, drift_xz;
         int bitMap;
     //'steep' xy Line, make longest delta x plane  
-    swap_xy = Math.abs(p1.y - p0.y) > Math.abs(p1.x - p0.x);
+    swap_xy = abs(p1.y - p0.y) > abs(p1.x - p0.x);
     
     if (swap_xy) {
         //Swap(x0, y0)
@@ -103,7 +145,7 @@ public class Tracer {
         p1.y = temp;
     }
     //do same for xz
-    swap_xz = Math.abs(p1.z - p0.z) > Math.abs(p1.x - p0.x);  
+    swap_xz = abs(p1.z - p0.z) > abs(p1.x - p0.x);  
     
     if (swap_xz) {
         //Swap(x0, y0)
@@ -117,9 +159,9 @@ public class Tracer {
     }
     //delta is Length in each plane
     delta.set(
-            Math.abs(p1.x - p0.x),
-            Math.abs(p1.y - p0.y),
-            Math.abs(p1.z - p0.z));
+            abs(p1.x - p0.x),
+            abs(p1.y - p0.y),
+            abs(p1.z - p0.z));
     
     //drift controls when to step in 'shallow' planes
     //starting value keeps Line centred
