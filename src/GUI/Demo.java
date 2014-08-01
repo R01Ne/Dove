@@ -32,16 +32,25 @@ public class Demo extends javax.swing.JPanel {
     private Image src = null;
     private DemoKeyListener mDemoKeyListener;
     
+    private static int FRAME_WIDTH = 600;
+    private static int FRAME_HEIGHT = 480;
+    
     public Demo(DemoKeyListener demoKeyListener) {
         mDemoKeyListener = demoKeyListener;
         new Worker().execute();
     }
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (src != null) g.drawImage(src, 0, 0, this);
     }
     private class Worker extends SwingWorker<Void, Image>{
-        private final Color[] colors = { Color.red, Color.green, Color.blue };
+        private final Color[] colors;
+
+        private Worker() {
+            this.colors = new Color[]{Color.red, Color.green, Color.blue};
+        }
+        @Override
         protected void process(List<Image> chunks){
             for (Image bufferedImage : chunks){
                 src = bufferedImage;
@@ -82,12 +91,12 @@ public class Demo extends javax.swing.JPanel {
             //t.cam.horizontalAngle = Math.PI/4;
             t.cam.verticalAngle=-Math.PI/8;
             int frames = 0;
-            int[] mem = new int[300 * 240];
+            int[] mem = new int[FRAME_WIDTH * FRAME_HEIGHT];
             long start = System.currentTimeMillis();
             long end = start + 15000;
             long last = start;
             boolean runForever = false;
-            BufferedImage bi = new BufferedImage(300, 240, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bi = new BufferedImage(FRAME_WIDTH, FRAME_HEIGHT, BufferedImage.TYPE_INT_ARGB);
                 
             while (last < end || runForever){
                 
@@ -95,12 +104,12 @@ public class Demo extends javax.swing.JPanel {
                 
 //                int col = colors[frames % colors.length].getRGB();
                 
-                t.parallelRender(mem,300,240);
+                t.parallelRender(mem,FRAME_WIDTH, FRAME_HEIGHT);
                 
                 //TODO: Re-Enable this
-                if (!runForever)t.cam.horizontalAngle +=Math.PI/16 ;
+                if (!runForever)t.cam.horizontalAngle +=Math.PI/128 ;
                 
-                Image img = createImage(new MemoryImageSource(300,240, mem, 0, 300));
+                Image img = createImage(new MemoryImageSource(FRAME_WIDTH,FRAME_HEIGHT, mem, 0, FRAME_WIDTH));
                 Graphics2D g2 = bi.createGraphics();
                 g2.drawImage(img, 0, 0, null);
                 g2.dispose();
@@ -164,7 +173,7 @@ public class Demo extends javax.swing.JPanel {
                 
                 
                 jf.getContentPane().add(new Demo(demoKeyListener), BorderLayout.CENTER);
-                jf.setSize(300,240);
+                jf.setSize(FRAME_WIDTH,FRAME_HEIGHT);
                 jf.setVisible(true);
                 jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
